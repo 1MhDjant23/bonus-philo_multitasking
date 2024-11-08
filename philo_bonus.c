@@ -33,22 +33,17 @@ bool	init_data(char **av, t_program *data)
 	return (true);
 }
 
-bool	Create_Semaphore(t_forks *forks, t_program *data)
+void	unlink_semaphore(void)
 {
-	// int	i;
+	sem_unlink("forks");
+	sem_unlink("print");
+}
 
-	// i = -1;
-	// data->time_of_starting = 0;
-	// while (++i < data->n_of_p)
-	// {
-		forks->sem = sem_open("Semaphore", O_CREAT | O_EXCL, 0777, data->n_of_p);
-		if (forks->sem == SEM_FAILED)
-		{
-			// perror("sem_open");
-			return (false);
-		}
-	// }
-	return (true);
+void	init_semaphore(t_program *data)
+{
+	unlink_semaphore();
+	data->forks = sem_open("forks", O_EXCL | O_CREAT, 0600, data->n_of_p);
+	data->print = sem_open("print", O_EXCL | O_CREAT, 0600, 1);
 }
 
 void	init_philos(t_program *data)
@@ -62,34 +57,21 @@ void	init_philos(t_program *data)
 	{
 		data->philos[i].id = i + 1;
 		data->philos[i].count_meal = 0;
-		// data->philos[i].l_sem = data->forks[i].sem;
-		// data->philos[i].r_sem = data->forks[i + 1].sem;
 		data->philos[i].is_full = false;
 		data->philos[i].time_last_meal = get_time();
-		data->philos[i].ready = false;
 	}
-	data->philos[i].r_sem = data->forks[i - 1].sem;
 	data->end_simult = false;
 	data->time_of_starting = get_time();
-	data->GO = false;
 }
 
-bool	init_resource(t_program *data)
+void	init_resource(t_program *data)
 {
     int i;
 
 	i = -1;
-    data->forks = (t_forks*)malloc(sizeof(t_forks) * data->n_of_p);
-    data->philos = (t_philo*)malloc(sizeof(t_philo) * data->n_of_p);
-    if (!safe_malloc(data))
-        return (false);
+    data->philos = safe_malloc(sizeof(t_philo) * data->n_of_p);
 	while (++i < data->n_of_p)
 		data->philos[i].data = data;
-	if (!Create_Semaphore(data->forks, data))
-	{
-		free(data->forks);
-		return (free(data->philos), false);
-	}
+	init_semaphore(data);
 	init_philos(data);
-	return (true);
 }

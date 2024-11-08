@@ -32,7 +32,10 @@ void	ft_sleep(long x)
 bool	base_case(t_program *data, t_enum stat)
 {
 	if (data->end_simult == true && stat != DEAD)
+	{
+		sem_post(data->print);
 		return (true);
+	}
 	return (false);
 }
 
@@ -40,6 +43,7 @@ void	ft_print(t_philo *philos, t_enum status)
 {
 	long	start;
 
+	sem_wait(philos->data->print);
 	if (base_case(philos->data, status))
 		return ;
 	start = philos->data->time_of_starting; 
@@ -58,7 +62,7 @@ void	ft_print(t_philo *philos, t_enum status)
 	else if (status == TAKEN)
 		printf("%ld %d has taken a fork\n", get_time()
 			- start, philos->id);
-	// pthread_mutex_unlock(&philos->data->print_func);
+	sem_post(philos->data->print);
 }
 
 

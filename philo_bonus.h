@@ -58,11 +58,11 @@ typedef struct s_program
 	long		time_t_sleep;
 	long		limit_meals;
 	long		time_of_starting;
+	sem_t		*forks;
+	sem_t		*print;
 	bool		end_simult;
-	bool		GO;
 	pthread_t	tid;
 	t_philo		*philos;
-	t_forks		*forks;
 }				t_program;
 
 struct s_philo
@@ -72,17 +72,9 @@ struct s_philo
 	long		time_last_meal;
 	pid_t		cid;
 	bool		is_full;
-	bool		ready;
-	sem_t		*l_sem;
-	sem_t		*r_sem;
 	t_program	*data;
 };
 
-struct s_forks
-{
-	int		id;
-	sem_t	*sem;
-};
 
 
 void	ft_sleep(long x);
@@ -91,10 +83,11 @@ void	start_dinner(t_program *data);
 bool	checking_valid_input(char **av);
 bool	init_data(char **av, t_program *data);
 long	ft_atol(char *str);
-bool	init_resource(t_program *data);
+void	init_resource(t_program *data);
 long	get_time(void);
-bool	safe_malloc(t_program *data);
 void	ft_print(t_philo *philos, t_enum status);
 void	*monitoring(void *arg);
+void	*safe_malloc(size_t size);
+
 
 #endif

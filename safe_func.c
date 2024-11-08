@@ -12,24 +12,12 @@
 
 #include "philo_bonus.h"
 
-bool	safe_malloc(t_program *data)
+void	*safe_malloc(size_t size)
 {
-    if (!data->forks && !data->philos)
-	{
-		printf("malloc faill to alloc mutex and thread\n");
-		return (false);
-	}
-	if (!data->forks && data->philos)
-	{
-		printf("malloc faill to alloc mutex\n");
-		free(data->philos);
-		return (false);
-	}
-	if (!data->philos && data->forks)
-	{
-		printf("malloc faill to alloc thread\n");
-		free(data->forks);
-		return (false);
-	}
-	return (true);
+	void	*ret;
+
+	ret = malloc(size);
+	if (!ret)
+		exit(EXIT_FAILURE);
+	return (ret);
 }
