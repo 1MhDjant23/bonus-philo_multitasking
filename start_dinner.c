@@ -6,7 +6,7 @@
 /*   By: mait-taj <mait-taj@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:02:55 by mait-taj          #+#    #+#             */
-/*   Updated: 2024/10/25 18:06:13 by mait-taj         ###   ########.fr       */
+/*   Updated: 2024/11/08 22:19:16 by mait-taj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,21 @@ void	is_eating(t_philo *philos)
 	ft_print(philos, EAT);
 	ft_sleep(philos->data->time_t_eat);
 	philos->count_meal += 1;
+	philos->time_last_meal = get_time();
 	sem_post(philos->data->forks);	
 	sem_post(philos->data->forks);
-	philos->time_last_meal = get_time();
 	if (philos->count_meal == philos->data->limit_meals)
+	{
+		philos->is_full = true;
 		exit(EXIT_SUCCESS);
+	}
 }
 
 void	routine(t_philo *philos)
 {
+	pthread_t	tid;
+
+	pthread_create(&tid, NULL, monitor, philos->data);
 	if (philos->id % 2 == 0)
 	{
 		ft_print(philos, SLEEP);
@@ -43,6 +49,7 @@ void	routine(t_philo *philos)
 		ft_print(philos, SLEEP);
 		ft_sleep(philos->data->time_t_sleep);
 	}
+	pthread_join(tid, NULL);
 	exit(EXIT_SUCCESS);
 }
 
@@ -63,9 +70,13 @@ void	start_dinner(t_program *data)
 		if (data->philos[i].cid == 0)
 		{
 			routine(&data->philos[i]);
-
+			exit(EXIT_SUCCESS);
 		}
-		
+	}
+	i = -1;
+	while (++i < n_o_p)
+	{
+		waitpid(data->philos[i].cid, 0, 0);
 	}
 	
 }

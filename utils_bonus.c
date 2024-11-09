@@ -6,7 +6,7 @@
 /*   By: mait-taj <mait-taj@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 15:07:00 by mait-taj          #+#    #+#             */
-/*   Updated: 2024/10/25 18:14:12 by mait-taj         ###   ########.fr       */
+/*   Updated: 2024/11/08 22:30:49 by mait-taj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,11 @@ bool	death(t_program *data)
 	{
 		if (get_time() - data->philos[i].time_last_meal >= data->time_t_die)
 			return (true);
-				// printf("**%d**\n", data->philos[i].id);
-		// usleep(200);
 	}
 	return (false);
 }
 
-void	*monitoring(void *arg)
+void	*monitor(void *arg)
 {
 	t_program	*data;
 	int			i;
@@ -111,7 +109,6 @@ void	*monitoring(void *arg)
 	data = (t_program*)arg;
 	while (data->end_simult == false)
 	{
-		// write(1, "MONIT\n", 6);
 		if (philo_full(data) == true)
 			break ;
 		if (death(data) == true)
@@ -124,5 +121,6 @@ void	*monitoring(void *arg)
 	i = -1;
 	while (++i < data->n_of_p)
 		kill(data->philos[i].cid, SIGTERM);
+	// exit(EXIT_SUCCESS);
 	return (NULL);
 }

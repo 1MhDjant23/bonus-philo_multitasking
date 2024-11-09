@@ -6,7 +6,7 @@
 /*   By: mait-taj <mait-taj@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:13:30 by mait-taj          #+#    #+#             */
-/*   Updated: 2024/10/25 10:38:15 by mait-taj         ###   ########.fr       */
+/*   Updated: 2024/11/08 22:15:41 by mait-taj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ typedef struct s_program
 	sem_t		*forks;
 	sem_t		*print;
 	bool		end_simult;
-	pthread_t	tid;
 	t_philo		*philos;
 }				t_program;
 
@@ -86,7 +85,7 @@ long	ft_atol(char *str);
 void	init_resource(t_program *data);
 long	get_time(void);
 void	ft_print(t_philo *philos, t_enum status);
-void	*monitoring(void *arg);
+void	*monitor(void *arg);
 void	*safe_malloc(size_t size);
 
 

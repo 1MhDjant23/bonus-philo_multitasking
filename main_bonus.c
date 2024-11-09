@@ -6,7 +6,7 @@
 /*   By: mait-taj <mait-taj@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 13:15:11 by mait-taj          #+#    #+#             */
-/*   Updated: 2024/10/25 22:20:59 by mait-taj         ###   ########.fr       */
+/*   Updated: 2024/11/08 21:34:16 by mait-taj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ int main(int ac, char **av)
 		return (1);
 	}
 	init_resource(&data);
-	// if (pthread_create(&data.tid, NULL, monitoring, &data) != 0)
-	// 	return (1);
 	start_dinner(&data);
 	
     return 0;
